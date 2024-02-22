@@ -20,8 +20,8 @@ jobs:
         distribution: 'adopt'
 
     # # Assuming DesigniteJava.jar needs to be downloaded or is not in the external repository
-    # - name: Download DesigniteJava.jar
-    #   run: wget -O DesigniteJava.jar https://example.com/path/to/DesigniteJava.jar
+    - name: Download DesigniteJava.jar
+      run: wget -O DesigniteJava.jar https://github.com/indra-deepika/AutomaticRefactoring/blob/master/DesigniteJava.jar
 
     - name: Run DesigniteJava
       run: java -jar DesigniteJava.jar -i . -o ./DesigniteJavaOutput
