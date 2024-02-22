@@ -1,4 +1,4 @@
-name: Run DesigniteJava Analysis
+name: Run DesigniteJava Analysis on External Repository
 
 on: [push, pull_request]
 
@@ -7,8 +7,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout external repository
+      uses: actions/checkout@v2
       with:
+        repository: 'indra-deepika/SE_Bonus_Test_Repo'
         fetch-depth: 0 # Ensures the whole repository is checked out
 
     - name: Set up JDK 11
@@ -17,11 +19,16 @@ jobs:
         java-version: '11'
         distribution: 'adopt'
 
+    # # Assuming DesigniteJava.jar needs to be downloaded or is not in the external repository
+    # - name: Download DesigniteJava.jar
+    #   run: wget -O DesigniteJava.jar https://example.com/path/to/DesigniteJava.jar
+
     - name: Run DesigniteJava
-      run: java -jar ./DesigniteJava.jar -i ../SE_Bonus_Test_Repo -o ./DesginiteJavaOutput
+      run: java -jar DesigniteJava.jar -i . -o ./DesigniteJavaOutput
 
     # Optional: Upload DesigniteJava results as an artifact
     - uses: actions/upload-artifact@v2
       with:
         name: designite-results
-        path: designite_output/
+        path: ./DesigniteJavaOutput/
+
