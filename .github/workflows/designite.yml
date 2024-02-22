@@ -18,7 +18,7 @@ jobs:
         distribution: 'adopt'
 
     - name: Run DesigniteJava
-      run: java -jar ../DesigniteJava.jar -i ../SE_Bonus_Test_Repo -o ./DesginiteJavaOutput
+      run: java -jar ./DesigniteJava.jar -i ../SE_Bonus_Test_Repo -o ./DesginiteJavaOutput
 
     # Optional: Upload DesigniteJava results as an artifact
     - uses: actions/upload-artifact@v2
