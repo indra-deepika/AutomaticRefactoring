@@ -35,7 +35,7 @@ jobs:
 
   process_results:
 
-    needs: run_designite
+    needs: designite_analysis
     runs-on: ubuntu-latest
     name: Download Designite Results and Process with Python
     steps:
