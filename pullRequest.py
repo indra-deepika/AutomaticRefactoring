@@ -17,7 +17,7 @@ print(refactored_code + " OOPSS ")
 
 try:
     repo = g.get_repo(REPO_NAME)
-    main_ref = repo.get_git_ref('heads/main')
+    main_ref = repo.get_git_ref('heads/master')
     main_sha = main_ref.object.sha
     main_commit = repo.get_git_commit(main_sha)
     main_tree_sha = main_commit.tree.sha
