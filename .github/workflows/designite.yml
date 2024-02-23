@@ -50,4 +50,4 @@ jobs:
             path: ./DesigniteJavaOutput
 
         - name: Process Results with Python
-          run: python detectDesignSmells.py ./DesigniteJavaOutput
+          run: python detectDesignSmells.py ./DesigniteJavaOutput > design_smells_output.txt
