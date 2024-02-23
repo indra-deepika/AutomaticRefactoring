@@ -61,6 +61,6 @@ jobs:
         - name: Run Create Pull Request Script
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          run: python create_pull_request.py design_smells_output.txt
+          run: python pullRequest.py design_smells_output.txt
 
 

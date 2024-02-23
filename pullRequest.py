@@ -1,25 +1,45 @@
-from github import Github
-def create_pull_request(repo, original_branch, new_branch_name, file_path, new_code, pr_title, pr_body):
-    sb = repo.get_branch(original_branch)
-    repo.create_git_ref(ref=f'refs/heads/{new_branch_name}', sha=sb.commit.sha)
-    contents = repo.get_contents(file_path, ref=new_branch_name)
-    repo.update_file(contents.path, "Refactoring code", new_code, contents.sha, branch=new_branch_name)
-    pr = repo.create_pull(title=pr_title, body=pr_body, head=new_branch_name, base=original_branch)
-    return pr.html_url
+from github import Github, GithubException
+import os
+import sys
+from constants import OPENAI_API_KEY , GITHUB_TOKEN , REPO_NAME , FILE_PATH
+# Configuration
 
-new_branch_name = 'refactoring-branch'
-pr_title = "Automated Refactoring for Design Smell Fixes"
-pr_body = f"Refactoring changes applied to address the following design smells: \n\n - Long Method\n - Long Parameter List\n - Duplicate Code\n - Feature Envy\n - Data Clumps\n - Switch Statements\n - Refused Bequest\n - Lazy Class\n - Speculative Generality\n - Message Chains\n - Middle Man\n - Inappropriate Intimacy\n - Shotgun Surgery\n - Divergent Change\n - Parallel Inheritance Hierarchies\n - Blob\n - Functional Decomposition\n - Primitive Obsession\n - Data Class\n - Refused Bequest\n - Comments\n - Duplicate Code\n - Lazy Class\n - Data Clumps\n - Feature Envy\n - Long Method\n - Long Parameter List\n - Switch Statements\n - Middle Man\n - Inappropriate Intimacy\n - Message Chains\n - Speculative Generality\n - Data Class\n - Primitive Obsession\n - Refused Bequest\n - Lazy Class\n - Data Clumps\n - Feature Envy\n - Long Method\n - Long Parameter List\n - Switch Statements\n - Middle Man\n - Inappropriate Intimacy\n - Message Chains\n - Speculative Generality\n - Data Class\n - Primitive Obsession\n - Refused Bequest\n - Lazy Class\n - Data Clumps\n - Feature Envy\n - Long Method\n - Long Parameter List\n - Switch Statements\n - Middle Man\n - Inappropriate Intimacy\n - Message Chains\n - Speculative Generality\n - Data Class\n - Primitive Obsession\n - Refused Bequest\n - Lazy Class\n - Data Clumps\n - Feature Envy\n - Long Method\n - Long Parameter List\n - Switch Statements\n - Middle Man\n - Inappropriate Intimacy\n - Message Chains\n - Speculative Generality\n - Data Class\n - Primitive Obsession\n - Refused Bequest\n - Lazy Class\n - Data Clumps\n - Feature Envy\n - Long Method\n - Long Parameter List\n - Switch Statements\n - Middle Man\n - Inappropriate Intimacy\n - Message Chains\n - Speculative Generality\n - Data Class\n - Primitive Obsession\n - Refused Bequest\n - Lazy Class\n - Data Clumps\n - Feature Envy\n - Long Method\n - Long Parameter List\n - Switch Statements\n - Middle Man\n - Inappropriate Intimacy\n - Message Chains\n - Speculative Generality\n - Data Class\n - Primitive Obsession\n - Refused Bequest\n - Lazy Class\n - Data Clumps\n - Feature En"
+OUTPUT_FILE_PATH = sys.argv[1]  # The output file path from the command line argument
 
-GITHUB_TOKEN = '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'
-REPO_NAME = 'indra-deepika/clash-of-clans'
-FILE_PATH = '/src/building.py'
-refactored_code = 'Alas! The refactored code!'
-
+# Initialize GitHub client
 g = Github(GITHUB_TOKEN)
-repo = g.get_repo(REPO_NAME)
-contents = repo.get_contents(FILE_PATH)
-code = contents.decoded_content.decode()
 
-pr_url = create_pull_request(repo, 'main', new_branch_name, FILE_PATH, refactored_code, pr_title, pr_body)
-print("Pull Request URL:", pr_url)
+try:
+    repo = g.get_repo(REPO_NAME)
+    main_ref = repo.get_git_ref('heads/main')
+    main_sha = main_ref.object.sha
+    main_commit = repo.get_git_commit(main_sha)
+    main_tree_sha = main_commit.tree.sha
+
+    # Read the refactored code from the output file
+    with open(OUTPUT_FILE_PATH, 'r') as file:
+        refactored_code = file.read()
+
+    # Create a blob with the refactored code
+    blob = repo.create_git_blob(refactored_code, "utf-8")
+
+    # Create a new tree with the modifications
+    element = Github.GitTreeElement(FILE_PATH, '100644', 'blob', sha=blob.sha)
+    tree = repo.create_git_tree([element], base_tree=main_tree_sha)
+
+    # Create a new commit with the new tree
+    commit_message = "Refactor code"
+    new_commit = repo.create_git_commit(commit_message, tree, [main_commit])
+
+    # Create a new branch from the new commit
+    new_branch_name = "refactoring"
+    repo.create_git_ref(ref=f"refs/heads/{new_branch_name}", sha=new_commit.sha)
+
+    # Create a pull request
+    pr_title = "Refactor code using automated tool"
+    pr_body = "This pull request applies refactoring changes to improve code quality."
+    pr = repo.create_pull(title=pr_title, body=pr_body, head=new_branch_name, base="main")
+    print(f"Pull Request created: {pr.html_url}")
+
+except GithubException as e:
+    print(f"An error occurred: {e}")
