@@ -25,7 +25,7 @@ jobs:
 
     
     - name: Run DesigniteJava
-      run: java -jar DesigniteJava.jar -i . -o ./DesigniteJavaOutput
+      run: java -jar DesigniteJava.jar -i ./books-web/src/main/java/com/sismics/books/rest/resource -o ./DesigniteJavaOutput
 
     # Optional: Upload DesigniteJava results as an artifact
     - uses: actions/upload-artifact@v2
@@ -33,3 +33,21 @@ jobs:
         name: designite-results
         path: ./DesigniteJavaOutput/
 
+  process_results:
+
+    needs: run_designite
+    runs-on: ubuntu-latest
+    name: Download Designite Results and Process with Python
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        # Download the artifact from the previous job
+        - name: Download DesigniteJava Results
+          uses: actions/download-artifact@v2
+          with:
+            name: designite-results
+            path: ./DesigniteJavaOutput
+
+        - name: Process Results with Python
+          run: python detectDesignSmells.py ./DesigniteJavaOutput
