@@ -9,11 +9,11 @@ OUTPUT_FILE_PATH = sys.argv[1]  # The output file path from the command line arg
 # Initialize GitHub client
 g = Github(os.getenv('GITHUB_TOKEN'))
 
-# # Read the refactored code from the output file
-# with open(OUTPUT_FILE_PATH, 'r') as file:
-#     refactored_code = file.read()
-#
-# print(refactored_code + " OOPSS ")
+# Read the refactored code from the output file
+with open(OUTPUT_FILE_PATH, 'r') as file:
+    refactored_code = file.read()
+
+print(refactored_code + " OOPSS ")
 
 try:
     repo = g.get_repo(REPO_NAME)
