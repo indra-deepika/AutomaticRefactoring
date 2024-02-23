@@ -21,12 +21,12 @@ def create_pull_request(repo_name, file_path, output_file_path):
         with open(output_file_path, 'r') as file:
             refactored_code = file.read()
 
-        # Create a new branch from the default branch
-        default_branch = repo.get_branch(repo.default_branch)
-        print(default_branch)
-        new_branch_name = "refactoring-branch"
-        ref = f"refs/heads/{new_branch_name}"
-        repo.create_git_ref(ref, default_branch.commit.sha)
+#         # Create a new branch from the default branch
+#         default_branch = repo.get_branch(repo.default_branch)
+#         print(default_branch)
+        new_branch_name = "refactor_code"
+#         ref = f"refs/heads/{new_branch_name}"
+#         repo.create_git_ref(ref, default_branch.commit.sha)
 
         # Commit the changes to the new branch
         commit_message = "Apply refactoring"
