@@ -20,6 +20,7 @@ def create_pull_request(repo_name, file_path, output_file_path):
 
         # Create a new branch from the default branch
         default_branch = repo.get_branch(repo.default_branch)
+        print(default_branch)
         new_branch_name = "refactoring-branch"
         ref = f"refs/heads/{new_branch_name}"
         repo.create_git_ref(ref, default_branch.commit.sha)
@@ -29,11 +30,11 @@ def create_pull_request(repo_name, file_path, output_file_path):
         contents = repo.get_contents(file_path, ref=repo.default_branch)
         repo.update_file(contents.path, commit_message, refactored_code, contents.sha, branch=new_branch_name)
 
-        # Create a pull request
-        pr_title = "Refactor code using automated tool"
-        pr_body = "This pull request applies refactoring changes to improve code quality."
-        pr = repo.create_pull(title=pr_title, body=pr_body, head=new_branch_name, base=repo.default_branch)
-        print(f"Pull Request created: {pr.html_url}")
+#         # Create a pull request
+#         pr_title = "Refactor code using automated tool"
+#         pr_body = "This pull request applies refactoring changes to improve code quality."
+#         pr = repo.create_pull(title=pr_title, body=pr_body, head=new_branch_name, base=repo.default_branch)
+#         print(f"Pull Request created: {pr.html_url}")
 
     except GithubException as e:
         print(f"An error occurred: {e.status}")
