@@ -42,4 +42,4 @@ try:
     print(f"Pull Request created: {pr.html_url}")
 
 except GithubException as e:
-    print(f"An error occurred: {e}")
+    print(f"An error occurred   : {e}")
