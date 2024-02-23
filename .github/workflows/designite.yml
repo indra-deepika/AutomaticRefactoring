@@ -57,3 +57,10 @@ jobs:
           with:
             name: design-smells-output
             path: design_smells_output.txt
+
+        - name: Run Create Pull Request Script
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: python create_pull_request.py design_smells_output.txt
+
+
