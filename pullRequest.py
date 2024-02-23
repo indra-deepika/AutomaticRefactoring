@@ -13,7 +13,7 @@ g = Github(os.getenv('GITHUB_TOKEN'))
 with open(OUTPUT_FILE_PATH, 'r') as file:
     refactored_code = file.read()
 
-print(refactored_code)
+print(refactored_code + " OOPSS ")
 
 # try:
 #     repo = g.get_repo(REPO_NAME)
