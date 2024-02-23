@@ -9,47 +9,36 @@ OUTPUT_FILE_PATH = sys.argv[1]  # The output file path from the command line arg
 # Initialize GitHub client
 g = Github(os.getenv('GITHUB_TOKEN'))
 
-# Read the refactored code from the output file
-with open(OUTPUT_FILE_PATH, 'r') as file:
-    refactored_code = file.read()
+def create_pull_request(repo_name, file_path, output_file_path):
+    try:
+        # Load the repository
+        repo = g.get_repo(repo_name)
 
-print(refactored_code + " OOPSS ")
+        # Read the refactored code from the output file
+        with open(output_file_path, 'r') as file:
+            refactored_code = file.read()
 
-try:
-    repo = g.get_repo(REPO_NAME)
-    main_ref = repo.get_git_ref('heads/master')
-    main_sha = main_ref.object.sha
-    main_commit = repo.get_git_commit(main_sha)
-    main_tree_sha = main_commit.tree.sha
+        # Create a new branch from the default branch
+        default_branch = repo.get_branch(repo.default_branch)
+        new_branch_name = "refactoring-branch"
+        ref = f"refs/heads/{new_branch_name}"
+        repo.create_git_ref(ref, default_branch.commit.sha)
 
-    # Read the refactored code from the output file
-    with open(OUTPUT_FILE_PATH, 'r') as file:
-        refactored_code = file.read()
+        # Commit the changes to the new branch
+        commit_message = "Apply refactoring"
+        contents = repo.get_contents(file_path, ref=repo.default_branch)
+        repo.update_file(contents.path, commit_message, refactored_code, contents.sha, branch=new_branch_name)
 
-    # Create a blob with the refactored code
-    blob = repo.create_git_blob(refactored_code, "utf-8")
+        # Create a pull request
+        pr_title = "Refactor code using automated tool"
+        pr_body = "This pull request applies refactoring changes to improve code quality."
+        pr = repo.create_pull(title=pr_title, body=pr_body, head=new_branch_name, base=repo.default_branch)
+        print(f"Pull Request created: {pr.html_url}")
 
-    # Create a new tree with the modifications
-    element = Github.GitTreeElement(FILE_PATH, '100644', 'blob', sha=blob.sha)
-    tree = repo.create_git_tree([element], base_tree=main_tree_sha)
+    except GithubException as e:
+        print(f"An error occurred: {e.status}")
+        print(e.data)
+        print(e.headers)
 
-    # Create a new commit with the new tree
-    commit_message = "Refactor code"
-    new_commit = repo.create_git_commit(commit_message, tree, [main_commit])
-
-    # Create a new branch from the new commit
-    new_branch_name = "refactoring"
-    repo.create_git_ref(ref=f"refs/heads/{new_branch_name}", sha=new_commit.sha)
-
-    # Create a pull request
-    pr_title = "Refactor code using automated tool"
-    pr_body = "This pull request applies refactoring changes to improve code quality."
-    pr = repo.create_pull(title=pr_title, body=pr_body, head=new_branch_name, base="main")
-    print(f"Pull Request created: {pr.html_url}")
-
-
-
-except GithubException as e:
-    print(f"An error occurred: {e.status} + ")
-    print(e.data)  # This will print the error message from GitHub
-    print(e.headers)  # This can sometimes include useful information
+# Run the function with the provided arguments
+create_pull_request(REPO_NAME, FILE_PATH, OUTPUT_FILE_PATH)
