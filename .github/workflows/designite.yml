@@ -1,6 +1,10 @@
 name: Run DesigniteJava Analysis on External Repository
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 8 * * *' # At 08:00 AM every day
 
 jobs:
   designite_analysis:
@@ -25,7 +29,7 @@ jobs:
 
     
     - name: Run DesigniteJava
-      run: java -jar DesigniteJava.jar -i ./books-web/src/main/java/com/sismics/books/rest/resource -o ./DesigniteJavaOutput
+      run: java -jar DesigniteJava.jar -i ./books-core/src/main/java/com/sismics/books/core/util/mime -o ./DesigniteJavaOutput
 
     # Optional: Upload DesigniteJava results as an artifact
     - uses: actions/upload-artifact@v2
@@ -54,6 +58,13 @@ jobs:
 
         - name: Process Results with Python
           run: python detectDesignSmells.py ./DesigniteJavaOutput > design_smells_output.txt
+
+        - name: List DesigniteJava Output
+          run: ls -l ./DesigniteJavaOutput
+
+        - name: Find Specific Design Smell File
+          run: |
+            find ./DesigniteJavaOutput -name '*designCodeSmell*' -exec echo "Found design smell file: {}" \;
 
         - name: Upload Output as Artifact
           uses: actions/upload-artifact@v2
