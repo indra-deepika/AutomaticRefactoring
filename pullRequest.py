@@ -7,7 +7,9 @@ from constants import OPENAI_API_KEY , GITHUB_TOKEN , REPO_NAME , FILE_PATH
 OUTPUT_FILE_PATH = sys.argv[1]  # The output file path from the command line argument
 
 # Initialize GitHub client
-g = Github(os.getenv('MY_PAT'))
+token = os.getenv('MY_PAT') or os.getenv('GITHUB_TOKEN')
+g = Github(token)
+
 
 
 # def create_pull_request(repo_name, file_path, output_file_path):
