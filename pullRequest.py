@@ -47,5 +47,9 @@ try:
     pr = repo.create_pull(title=pr_title, body=pr_body, head=new_branch_name, base="main")
     print(f"Pull Request created: {pr.html_url}")
 
+
+
 except GithubException as e:
-    print(f"An error occurred   : {e}")
+    print(f"An error occurred: {e.status}")
+    print(e.data)  # This will print the error message from GitHub
+    print(e.headers)  # This can sometimes include useful information
