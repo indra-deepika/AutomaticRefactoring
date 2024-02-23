@@ -8,6 +8,7 @@ OUTPUT_FILE_PATH = sys.argv[1]  # The output file path from the command line arg
 
 # Initialize GitHub client
 token = os.getenv('MY_PAT')
+print("hey")
 g = Github(token)
 repo = g.get_repo(repo_name)
 
