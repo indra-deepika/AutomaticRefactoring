@@ -34,6 +34,9 @@ jobs:
         path: ./DesigniteJavaOutput/
 
   process_results:
+    permissions:
+      contents: write
+      pull-requests: write
 
     needs: designite_analysis
     runs-on: ubuntu-latest
