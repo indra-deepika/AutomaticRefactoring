@@ -7,7 +7,7 @@ from constants import OPENAI_API_KEY , GITHUB_TOKEN , REPO_NAME , FILE_PATH
 OUTPUT_FILE_PATH = sys.argv[1]  # The output file path from the command line argument
 
 # Initialize GitHub client
-# g = Github(os.getenv('GITHUB_TOKEN'))
+g = Github(os.getenv('GITHUB_TOKEN'))
 
 # Read the refactored code from the output file
 with open(OUTPUT_FILE_PATH, 'r') as file:
