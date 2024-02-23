@@ -7,7 +7,7 @@ from constants import OPENAI_API_KEY , GITHUB_TOKEN , REPO_NAME , FILE_PATH
 OUTPUT_FILE_PATH = sys.argv[1]  # The output file path from the command line argument
 
 # Initialize GitHub client
-g = os.getenv('GITHUB_TOKEN')
+g = Github(os.getenv('GITHUB_TOKEN'))
 
 try:
     repo = g.get_repo(REPO_NAME)
