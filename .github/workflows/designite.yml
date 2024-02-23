@@ -58,6 +58,9 @@ jobs:
             name: design-smells-output
             path: design_smells_output.txt
 
+        - name: Install Python dependencies
+          run: pip install PyGithub
+
         - name: Run Create Pull Request Script
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
