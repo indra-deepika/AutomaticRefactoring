@@ -61,7 +61,7 @@ jobs:
           run: pip install PyGithub openai
 
         - name: Process Results with Python
-          run: python detectDesignSmells.py ./DesigniteJavaOutput > design_smells_output.txt
+          run: python refactorDesignSmells.py ./DesigniteJavaOutput > refactor_output.txt
 
         - name: List DesigniteJava Output
           run: ls -l ./DesigniteJavaOutput
@@ -69,21 +69,20 @@ jobs:
         - name: Find Specific Design Smell File
           run: |
             find ./DesigniteJavaOutput -name '*designCodeSmell*' -exec echo "Found design smell file: {}" \;
+            
 
         - name: Upload Output as Artifact
           uses: actions/upload-artifact@v2
           with:
             name: design-smells-output
-            path: design_smells_output.txt
-
-
+            path: refactor_output.txt
 
         - name: Run Create Pull Request Script
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
             MY_PAT: ${{ secrets.MY_PAT}}
             REPO_NAME: 'indra-deepika/SE_Bonus_Test_Repo'
-            FILE_PATH: '/books-web/src/main/java/com/sismics/books/rest/resource/UserResource.java'
+            FILE_PATH: '/books-core/src/main/java/com/sismics/books/core/util/mime/MimeType.java'
           run: python pullRequest.py design_smells_output.txt
 
 
