@@ -1,6 +1,7 @@
 import openai
 from github import Github
 import re
+import sys
 
 from constants import OPENAI_API_KEY , GITHUB_TOKEN , REPO_NAME , FILE_PATH
 openai.api_key = OPENAI_API_KEY
