@@ -50,6 +50,6 @@ try:
 
 
 except GithubException as e:
-    print(f"An error occurred: {e.status}")
+    print(f"An error occurred: {e.status} + ")
     print(e.data)  # This will print the error message from GitHub
     print(e.headers)  # This can sometimes include useful information
