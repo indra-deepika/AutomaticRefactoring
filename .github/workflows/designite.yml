@@ -4,7 +4,7 @@ on:
   push:
   pull_request:
   schedule:
-    - cron: '0 8 * * *' # At 08:00 AM every day
+    # - cron: '0 8 * * *' # At 08:00 AM every day
 
 jobs:
   designite_analysis:
